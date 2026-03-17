@@ -1,0 +1,271 @@
+﻿<Window x:Class="DGGroupSortFilterExample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:DGGroupSortFilterExample"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        Title="Динамическая группировка DataGrid" Height="650" Width="600"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!-- Конвертер для отображения статуса задачи -->
+        <local:CompleteConverter x:Key="completeConverter" />
+
+        <!-- Конвертер для отображения имени группы -->
+        <local:GroupNameConverter x:Key="groupNameConverter" />
+
+        <!-- Конвертер для группировки по месяцам -->
+        <local:MonthGroupConverter x:Key="monthGroupConverter" />
+
+        <!-- Коллекция задач -->
+        <local:Tasks x:Key="tasks" />
+
+        <!-- CollectionViewSource для группировки, сортировки и фильтрации -->
+        <CollectionViewSource x:Key="cvsTasks" Source="{StaticResource tasks}"
+                              Filter="CollectionViewSource_Filter">
+
+            <!-- Сортировка по умолчанию -->
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="ProjectName" Direction="Ascending" />
+                <scm:SortDescription PropertyName="DueDate" Direction="Ascending" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <TextBlock Text="Менеджер задач с динамической группировкой"
+                   FontSize="18" FontWeight="Bold"
+                   HorizontalAlignment="Center" Margin="0,0,0,15" />
+
+        <!-- Панель выбора группировки -->
+        <Border Grid.Row="1"
+                Background="#FFF0F0F0"
+                BorderBrush="#FFCCCCCC"
+                BorderThickness="1"
+                CornerRadius="5"
+                Padding="10"
+                Margin="0,0,0,10">
+            
+
+            <StackPanel>
+                <TextBlock Text="Настройка группировки:"
+                           FontWeight="Bold"
+                           Margin="0,0,0,10" />
+
+                <!-- Первый уровень группировки -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Уровень 1:" Width="80" VerticalAlignment="Center" />
+                    <ComboBox x:Name="cmbGroupBy1"
+                              Width="200"
+                              Margin="10,0,10,0"
+                              SelectionChanged="Grouping_Changed">
+                        <ComboBoxItem IsSelected="True">Без группировки</ComboBoxItem>
+                        <ComboBoxItem>Проект (ProjectName)</ComboBoxItem>
+                        <ComboBoxItem>Статус (Complete)</ComboBoxItem>
+                        <ComboBoxItem>Приоритет (Priority)</ComboBoxItem>
+                        <ComboBoxItem>Исполнитель (AssignedTo)</ComboBoxItem>
+                        <ComboBoxItem>Срок (DueDate) по месяцам</ComboBoxItem>
+                    </ComboBox>
+
+                    <CheckBox x:Name="chkSortGroups1"
+                              Content="Сортировать группы"
+                              VerticalAlignment="Center"
+                              IsChecked="True"
+                              Checked="Grouping_Changed"
+                              Unchecked="Grouping_Changed" />
+                </StackPanel>
+
+                <!-- Второй уровень группировки -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBlock Text="Уровень 2:" Width="80" VerticalAlignment="Center" />
+                    <ComboBox x:Name="cmbGroupBy2"
+                              Width="200"
+                              Margin="10,0,10,0"
+                              SelectionChanged="Grouping_Changed">
+                        <ComboBoxItem IsSelected="True">Без группировки</ComboBoxItem>
+                        <ComboBoxItem>Проект (ProjectName)</ComboBoxItem>
+                        <ComboBoxItem>Статус (Complete)</ComboBoxItem>
+                        <ComboBoxItem>Приоритет (Priority)</ComboBoxItem>
+                        <ComboBoxItem>Исполнитель (AssignedTo)</ComboBoxItem>
+                        <ComboBoxItem>Срок (DueDate) по месяцам</ComboBoxItem>
+                    </ComboBox>
+
+                    <CheckBox x:Name="chkSortGroups2"
+                              Content="Сортировать группы"
+                              VerticalAlignment="Center"
+                              IsChecked="True"
+                              Checked="Grouping_Changed"
+                              Unchecked="Grouping_Changed" />
+                </StackPanel>
+
+                <!-- Третий уровень группировки -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                    <TextBlock Text="Уровень 3:" Width="80" VerticalAlignment="Center" />
+                    <ComboBox x:Name="cmbGroupBy3"
+                              Width="200"
+                              Margin="10,0,10,0"
+                              SelectionChanged="Grouping_Changed">
+                        <ComboBoxItem IsSelected="True">Без группировки</ComboBoxItem>
+                        <ComboBoxItem>Проект (ProjectName)</ComboBoxItem>
+                        <ComboBoxItem>Статус (Complete)</ComboBoxItem>
+                        <ComboBoxItem>Приоритет (Priority)</ComboBoxItem>
+                        <ComboBoxItem>Исполнитель (AssignedTo)</ComboBoxItem>
+                        <ComboBoxItem>Срок (DueDate) по месяцам</ComboBoxItem>
+                    </ComboBox>
+
+                    <CheckBox x:Name="chkSortGroups3"
+                              Content="Сортировать группы"
+                              VerticalAlignment="Center"
+                              IsChecked="True"
+                              Checked="Grouping_Changed"
+                              Unchecked="Grouping_Changed" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- DataGrid с задачами -->
+        <DataGrid Grid.Row="2"
+                  x:Name="dataGrid1"
+                  ItemsSource="{Binding Source={StaticResource cvsTasks}}"
+                  AutoGenerateColumns="True"
+                  CanUserAddRows="True"
+                  CanUserDeleteRows="True"
+                  IsReadOnly="False"
+                  Margin="0,0,0,10">
+
+            <!-- Стили для группировки (будут применяться динамически) -->
+            <DataGrid.GroupStyle>
+                <!-- Стиль для групп верхнего уровня -->
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Margin" Value="0,0,0,5" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Expander IsExpanded="True"
+                                                  Background="#FF2C3E50"
+                                                  BorderBrush="#FF1A2632"
+                                                  Foreground="White"
+                                                  BorderThickness="1,1,1,3">
+                                            <Expander.Header>
+                                                <DockPanel>
+                                                    <TextBlock FontWeight="Bold"
+                                                               Text="{Binding Path=Name, Converter={StaticResource groupNameConverter}}"
+                                                               Margin="5,0,0,0"
+                                                               Width="200" />
+                                                    <TextBlock FontWeight="Bold"
+                                                               Text="{Binding Path=ItemCount}"
+                                                               TextAlignment="Right" />
+                                                </DockPanel>
+                                            </Expander.Header>
+                                            <Expander.Content>
+                                                <ItemsPresenter />
+                                            </Expander.Content>
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+
+                <!-- Стиль для групп второго уровня -->
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <Border Background="#FF3498DB" Padding="5" BorderThickness="0,0,0,1"
+                                    BorderBrush="#FF2980B9">
+                                <DockPanel>
+                                    <TextBlock
+                                        Text="{Binding Path=Name, Converter={StaticResource groupNameConverter}}"
+                                        Foreground="White"
+                                        FontWeight="Bold"
+                                        Margin="30,0,0,0"
+                                        Width="180" />
+                                    <TextBlock Text="{Binding Path=ItemCount}"
+                                               Foreground="White"
+                                               FontWeight="Bold" />
+                                </DockPanel>
+                            </Border>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+
+                <!-- Стиль для групп третьего уровня -->
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <Border Background="#FFE67E22" Padding="5" BorderThickness="0,0,0,1"
+                                    BorderBrush="#FFD35400">
+                                <DockPanel>
+                                    <TextBlock
+                                        Text="{Binding Path=Name, Converter={StaticResource groupNameConverter}}"
+                                        Foreground="White"
+                                        FontWeight="Bold"
+                                        Margin="60,0,0,0"
+                                        Width="160" />
+                                    <TextBlock Text="{Binding Path=ItemCount}"
+                                               Foreground="White"
+                                               FontWeight="Bold" />
+                                </DockPanel>
+                            </Border>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+
+            <!-- Стиль для строк DataGrid -->
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Background" Value="White" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#FFBDC3C7" />
+                            <Setter Property="BorderBrush" Value="#FF2C3E50" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding Complete}" Value="True">
+                            <Setter Property="Background" Value="#FFE8F8E8" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+
+        <!-- Нижняя панель управления -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Text="Фильтр (скрыть выполненные):"
+                       VerticalAlignment="Center"
+                       Margin="0,0,5,0" />
+            <CheckBox x:Name="cbCompleteFilter"
+                      VerticalAlignment="Center"
+                      Checked="CompleteFilter_Changed"
+                      Unchecked="CompleteFilter_Changed" />
+
+            <Button Content="Обновить данные"
+                    Margin="20,0,5,0"
+                    Padding="10,5"
+                    Click="RefreshData_Click" />
+
+            <Button Content="Сбросить группировку"
+                    Margin="5,0,0,0"
+                    Padding="10,5"
+                    Click="ClearGrouping_Click" />
+        </StackPanel>
+
+        <!-- Статус бар -->
+        <StatusBar Grid.Row="3" VerticalAlignment="Bottom" Margin="0,30,0,0">
+            <StatusBarItem>
+                <TextBlock x:Name="txtStatus" Text="Готово" />
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
