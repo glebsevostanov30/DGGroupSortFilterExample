@@ -8,4 +8,15 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
+	<PackageReference Include="ExcelDataReader" Version="3.6.0" />
+	<PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
+	<PackageReference Include="EPPlus" Version="7.5.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="utils\" />
+    </ItemGroup>
+
 </Project>

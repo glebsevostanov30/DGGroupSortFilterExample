@@ -1,26 +1,28 @@
 ﻿<Window x:Class="DGGroupSortFilterExample.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:DGGroupSortFilterExample"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        xmlns:converter="clr-namespace:DGGroupSortFilterExample.converter"
+        xmlns:model="clr-namespace:DGGroupSortFilterExample.model"
         Title="Динамическая группировка DataGrid" Height="650" Width="600"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <!-- Конвертер для отображения статуса задачи -->
-        <local:CompleteConverter x:Key="completeConverter" />
+        <converter:CompleteConverter x:Key="completeConverter" />
 
         <!-- Конвертер для отображения имени группы -->
-        <local:GroupNameConverter x:Key="groupNameConverter" />
+        <converter:GroupNameConverter x:Key="groupNameConverter" />
 
         <!-- Конвертер для группировки по месяцам -->
-        <local:MonthGroupConverter x:Key="monthGroupConverter" />
+        <converter:MonthGroupConverter x:Key="monthGroupConverter" />
 
         <!-- Коллекция задач -->
-        <local:Tasks x:Key="tasks" />
+        <model:Tasks x:Key="tasks" />
 
         <!-- CollectionViewSource для группировки, сортировки и фильтрации -->
-        <CollectionViewSource x:Key="cvsTasks" Source="{StaticResource tasks}"
+        <CollectionViewSource x:Key="CvsTasks" 
+                              Source="{StaticResource tasks}"
                               Filter="CollectionViewSource_Filter">
 
             <!-- Сортировка по умолчанию -->
@@ -133,7 +135,7 @@
         <!-- DataGrid с задачами -->
         <DataGrid Grid.Row="2"
                   x:Name="dataGrid1"
-                  ItemsSource="{Binding Source={StaticResource cvsTasks}}"
+                  ItemsSource="{Binding Source={StaticResource CvsTasks}}"
                   AutoGenerateColumns="True"
                   CanUserAddRows="True"
                   CanUserDeleteRows="True"
@@ -264,7 +266,7 @@
         <!-- Статус бар -->
         <StatusBar Grid.Row="3" VerticalAlignment="Bottom" Margin="0,30,0,0">
             <StatusBarItem>
-                <TextBlock x:Name="txtStatus" Text="Готово" />
+                <TextBlock x:Name="TxtStatus" Text="Готово" />
             </StatusBarItem>
         </StatusBar>
     </Grid>
