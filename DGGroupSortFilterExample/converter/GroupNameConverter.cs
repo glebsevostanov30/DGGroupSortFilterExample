@@ -12,7 +12,7 @@ public class GroupNameConverter : IValueConverter
         var str = value.ToString();
             
         // Преобразуем значения булевых полей
-        if (bool.TryParse(str, out bool boolValue))
+        if (bool.TryParse(str, out var boolValue))
         {
             return boolValue ? "✅ Выполнено" : "⏳ В работе";
         }
